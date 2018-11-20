@@ -4,6 +4,9 @@ require('dotenv').config({ silent: true });
 const express = require('express');
 const app = express();
 const routes = require('./routes');
+const cron = require("node-cron");
+const mailer = require('./services/mailer').transporter;
+const tasks = require('./tasks');
 
 // Make sure we are running node 7.6+
 const [major, minor] = process.versions.node.split('.').map(parseFloat);
@@ -14,14 +17,37 @@ if (major < 7 || (major === 7 && minor <= 5)) {
 }
 
 
+
 app.set('port', (process.env.PORT || 3000));
 
-// (() => {
-//     app.get("/", (req, res) => {
-//         console.log('API alive and kicking')
-//         res.status(200).send('Welcome to our restful API');
-//     });
-// })();
+
+//send user news update from ycombinator everyday
+cron.schedule('0 0 0 * * *', async function () {
+    try {
+        await tasks.getNews();
+        const attachments = [{ filename: 'snapshot.png', path: __dirname + '/../assets/snapshot.png', contentType: 'application/png' }];
+        const mailOptions = {
+            from: process.env.email, // sender address
+            to: 'Abimbola130@gmail.com', // list of receivers
+            subject: 'Snapshot', // Subject line
+            attachments,
+            // html: '<p>Your html here</p>'// plain text body
+        };
+        mailer.sendMail(mailOptions, function (err, info) {
+            if (err) {
+                console.log(err.message)
+            }
+            else {
+                console.log('sent');
+            }
+        });
+        console.log('send news to user email');
+    }
+    catch (err) {
+        console.log(err.message);
+    }
+
+});
 
 
 
