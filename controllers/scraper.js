@@ -3,6 +3,7 @@ const mailer = require('../services/mailer').transporter;
 
 
 exports.getScreenShot = async (req, res) => {
+    const { address } = req.query;
     const webAddress = `https://${(req.query.address || 'medium')}.com`;
     try {
         const browser = await puppeteer.launch();
@@ -14,7 +15,24 @@ exports.getScreenShot = async (req, res) => {
         res.send('screenshot saved');
     }
     catch (err) {
-        console.log('error', err.message);
+        res.status(500).send(err.message);
+    }
+};
+
+exports.getNews = async (req, res) => {
+    const { address } = req.query;
+    const webAddress = `https://${(address || 'news.ycombinator')}.com`;
+
+    try {
+        const browser = await puppeteer.launch();
+        const page = await browser.newPage();
+        await page.goto(`${webAddress}`, { waitUntil: 'networkidle2' });
+        await page.pdf({ path: `./assets/news.pdf`, format: 'A4' });
+
+        await browser.close();
+        res.send('File saved');
+    }
+    catch (err) {
         res.status(500).send(err.message);
     }
 };
@@ -108,7 +126,6 @@ exports.scrapeTwittter = async (req, res) => {
         res.send(ret);
     }
     catch (err) {
-        console.log('error', err.message);
         res.status(500).send(err.message);
     }
 };
