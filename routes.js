@@ -4,7 +4,7 @@ const Scraper = require('./controllers/scraper.js');
 
 router.get('/snapshot', Scraper.getScreenShot);
 
-
+router.post('/sendemail', Scraper.sendEmail);
 
 
 module.exports = router;
