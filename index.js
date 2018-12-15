@@ -25,10 +25,10 @@ app.set('port', (process.env.PORT || 3000));
 // 0 0 0 * * *
 
 //send user news update from ycombinator everyday
-cron.schedule('0 */01 * * * *', async function () {
+cron.schedule('0 0 0 * * *', async function () {
     try {
         await tasks.getNews();
-        const attachments = [{ filename: 'snapshot.png', path: __dirname + '/assets/snapshot.png', contentType: 'application/png' }];
+        const attachments = [{ filename: 'news.pdf', path: __dirname + '/assets/news.pdf', contentType: 'application/png' }];
         const mailOptions = {
             from: process.env.email, // sender address
             to: 'Abimbola130@gmail.com', // list of receivers
