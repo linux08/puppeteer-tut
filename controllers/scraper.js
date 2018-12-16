@@ -5,7 +5,7 @@ const mailer = require('../services/mailer').transporter;
 exports.getScreenShot = async (req, res) => {
     const { address } = req.query;
     // web address you want to screenshot , Default is medium.com
-    const webAddress = `https://${(req.query.address || 'medium')}.com`;
+    const webAddress = `https://${(address || 'medium')}.com`;
     try {
         const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
@@ -70,9 +70,6 @@ exports.scrapeTwittter = async (req, res) => {
             height: 800
         });
 
-        //scroll until twitter is done lazy loading
-        // await autoScroll(page);
-        //scrape the tweets
         const tweets = await page.evaluate(function () {
             //constant selector for the actual tweets on the screen
             const TWEET_SELECTOR = '.js-stream-tweet';
@@ -117,7 +114,6 @@ exports.scrapeTwittter = async (req, res) => {
             return ret;
         });
 
-        //add to csv
         ret.push(tweets);
         //close the page
         await page.close();
