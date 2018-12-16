@@ -4,13 +4,13 @@ const mailer = require('../services/mailer').transporter;
 
 exports.getScreenShot = async (req, res) => {
     const { address } = req.query;
+    // web address you want to screenshot , Default is medium.com
     const webAddress = `https://${(req.query.address || 'medium')}.com`;
     try {
         const browser = await puppeteer.launch();
         const page = await browser.newPage();
         await page.goto(webAddress);
         await page.screenshot({ path: `./assets/snapshot.png` });
-
         await browser.close();
         res.send('screenshot saved');
     }
@@ -61,7 +61,7 @@ exports.scrapeTwittter = async (req, res) => {
     let ret = [];
     const { search } = req.query;
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
         await page.goto(`https://twitter.com/search?f=tweets&vertical=default&q=${search}&src=typd`);
         //set viewport for the autoscroll function

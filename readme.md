@@ -11,3 +11,5 @@ Scrapping the web  using pupetter and node
 
 
 set heroku environmet variables from command line ```heroku config:set $(cat .env)```
+
+BASE URL : https://puppeteer-demo1.herokuapp.com/
