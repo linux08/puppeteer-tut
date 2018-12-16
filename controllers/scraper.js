@@ -7,7 +7,7 @@ exports.getScreenShot = async (req, res) => {
     // web address you want to screenshot , Default is medium.com
     const webAddress = `https://${(req.query.address || 'medium')}.com`;
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
         await page.goto(webAddress);
         await page.screenshot({ path: `./assets/snapshot.png` });
@@ -24,7 +24,7 @@ exports.getNews = async (req, res) => {
     const webAddress = `https://${(address || 'news.ycombinator')}.com`;
 
     try {
-        const browser = await puppeteer.launch();
+        const browser = await puppeteer.launch({ args: ['--no-sandbox', '--disable-setuid-sandbox'] });
         const page = await browser.newPage();
         await page.goto(`${webAddress}`, { waitUntil: 'networkidle2' });
         await page.pdf({ path: `./assets/news.pdf`, format: 'A4' });
