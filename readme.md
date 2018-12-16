@@ -33,4 +33,7 @@ Add the puppeteer heroku buildpack: ```heroku buildpacks:add https://github.com/
 
 BASE URL : https://puppeteer-demo1.herokuapp.com/
 
-https://puppeteer-demo1.herokuapp.com/scrape-twitter?search=nigeria
+ Get all the trending tweet relating to nigeria :
+ https://puppeteer-demo1.herokuapp.com/scrape-twitter?search=nigeria
+ 
+ to use the above endpoint change nigeria to whatever you want.
